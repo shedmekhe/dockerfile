@@ -1,0 +1,27 @@
+FROM node:13-alpine
+
+ENV MONGO_DB_USERNAME=admin \
+    MONGO_DB_PWD=password
+
+RUN mkdir -p /home/app
+
+COPY . /home/app
+
+
+
+# set default dir so that next commands executes in /home/app dir
+WORKDIR /home/app
+# Create the required directories
+RUN mkdir -p actserver/actserver/local_storage
+
+# Create the subdirectories `file1Data`, `file2Data`, and `file3Data` within `local_storage`
+RUN mkdir actserver/actserver/local_storage/file1Data/
+RUN mkdir actserver/actserver/local_storage/file2Data/
+RUN mkdir actserver/actserver/local_storage/file3Data/
+
+# will execute npm install in /home/app because of WORKDIR
+RUN npm install
+
+# no need for /home/app/server.js because of WORKDIR
+CMD ["node", "app.js"]
+EXPOSE 3000
